@@ -4,10 +4,12 @@ import random
 
 delay = 0.05
 
+# Score
+score = 0
 
 wn = turtle.Screen()
 wn.setup(width=600, height=600)
-wn.title("Snake game")
+wn.title("Snake game 2")
 wn.tracer(0)  # Turns off screen updates
 wn.bgcolor("green")
 
@@ -18,7 +20,7 @@ head.speed(0)
 head.penup()
 head.color("black")
 head.goto(0, 0)
-#head.shapesize(0.5)
+# head.shapesize(0.5)
 head.direction = "stop"
 
 # Snake food
@@ -27,7 +29,7 @@ food.shape("circle")
 food.speed(0)
 food.penup()
 food.color("red")
-#food.shapesize(0.5)
+# food.shapesize(0.5)
 food.goto(0, 100)
 
 # Pen
@@ -37,8 +39,10 @@ pen.color("white")
 pen.penup()
 pen.hideturtle()
 pen.goto(0, 260)
+pen.write("Score: 0", align="center", font=("Courier", 24, "normal"))
 
 segments = []
+
 
 # Functions
 def move():
@@ -74,13 +78,18 @@ def go_up():
 def go_down():
     head.direction = "down"
 
+def restart_game():
+    pen.clear()
+    # pen.setposition(0, 260)
+    pen.write("Score: {}".format(score), align="center", font=("Courier", 24, "normal"))
+
 # Keyboard bindings
 wn.listen()
 wn.onkeypress(go_up, "Up")
 wn.onkeypress(go_down, "Down")
 wn.onkeypress(go_right, "Right")
 wn.onkeypress(go_left, "Left")
-
+wn.onkeypress(restart_game, "Return")
 
 # Main loop
 while True:
@@ -91,7 +100,10 @@ while True:
         x = random.randint(-290, 290)
         y = random.randint(-290, 290)
         food.goto(x, y)
-
+        score += 1
+        pen.clear()
+        pen.setposition(0, 260)
+        pen.write("Score: {}".format(score), align="center", font=("Courier", 24, "normal"))
 
         # Growing snake's body
         new_segment = turtle.Turtle()
@@ -103,9 +115,9 @@ while True:
         segments.append(new_segment)
 
     # Move segments in a reverse order
-    for index in range(len(segments)-1, 0, -1):
-        x = segments[index-1].xcor()
-        y = segments[index-1].ycor()
+    for index in range(len(segments) - 1, 0, -1):
+        x = segments[index - 1].xcor()
+        y = segments[index - 1].ycor()
         segments[index].goto(x, y)
 
     # Move first segment where the head is
@@ -114,6 +126,20 @@ while True:
         y = head.ycor()
         segments[0].goto(x, y)
 
+    # Collision with boarders
+    if head.xcor() > 290 or head.xcor() < -290:
+        head.goto(0, 0)
+        head.direction = "stop"
+        pen.clear()
+        pen.write("Game over, score: {}".format(score), align="center", font=("Courier", 24, "normal"))
+        pen.setposition(0, 240)
+        pen.write("Press enter to restart game", align="center", font=("Courier", 24, "normal"))
+        score = 0
+        # segments = []
+        for index in range(len(segments) - 1, 0, -1):
+            segments[index].goto(350, 0)
+            segments[index].clear()
+        segments.clear()
 
 
     move()
