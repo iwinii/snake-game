@@ -4,8 +4,6 @@ import random
 
 delay = 0.05
 
-# Score
-score = 0
 
 wn = turtle.Screen()
 wn.setup(width=600, height=600)
@@ -39,7 +37,6 @@ pen.color("white")
 pen.penup()
 pen.hideturtle()
 pen.goto(0, 260)
-pen.write("Score: 0", align="center", font=("Courier", 24, "normal"))
 
 segments = []
 
@@ -94,9 +91,7 @@ while True:
         x = random.randint(-290, 290)
         y = random.randint(-290, 290)
         food.goto(x, y)
-        score += 1
-        pen.clear()
-        pen.write("Score: {}".format(score), align="center", font=("Courier", 24, "normal"))
+
 
         # Growing snake's body
         new_segment = turtle.Turtle()
