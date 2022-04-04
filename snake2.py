@@ -136,9 +136,8 @@ while True:
         pen.write("Press enter to restart game", align="center", font=("Courier", 24, "normal"))
         score = 0
         # segments = []
-        for index in range(len(segments) - 1, 0, -1):
-            segments[index].goto(350, 0)
-            segments[index].clear()
+        for segment in segments:
+            segment.goto(1000, 1000)
         segments.clear()
 
 
